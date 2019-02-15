@@ -1,0 +1,9 @@
+.calculator-results__container {
+  position: relative;
+}
+
+.calculator-results__container > span {
+  position: absolute;
+  right: 16px;
+  bottom: 40px;
+}

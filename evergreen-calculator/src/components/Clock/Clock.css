@@ -1,0 +1,13 @@
+.clock-container {
+  margin-bottom: 16px;
+}
+.clock-container > strong {
+  width: 49%;
+  border-radius: 0%;
+}
+.clock-container > strong:first-child {
+  float: left;
+}
+.clock-container > strong:last-child {
+  float: right;
+}

@@ -1,0 +1,7 @@
+.keypad-button {
+  width: 25%;
+  height: 70px;
+  display: inline-block;
+  font-weight: bold;
+  font-size: 14px;
+}
