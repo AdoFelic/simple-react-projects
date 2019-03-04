@@ -7,7 +7,7 @@ import {
 import {
   FETCH_ROBOTS
 } from '../actionTypes';
-import * as robotsApi from '../../api/robots.api';
+import * as robotsService from '../../service/robotsService';
 import {
   fetchRobotSuccess,
   fetchRobotsError
@@ -15,7 +15,7 @@ import {
 
 export function* fetchRobots() {
   try {
-    const robots = yield call(robotsApi.fetchAllRobots);
+    const robots = yield call(robotsService.fetchAllRobots);
     yield put(fetchRobotSuccess(robots));
   } catch(error) {
     yield put(fetchRobotsError(error));
