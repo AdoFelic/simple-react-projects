@@ -1,0 +1,13 @@
+.user-card__container {
+  margin: 24px auto;
+  .card {
+    margin: auto auto;
+  }
+  .card-body {
+    padding: 8px 0 0 0;
+  }
+  img {
+    width: inherit;
+    margin: 0 auto;
+  }
+}
