@@ -13,7 +13,7 @@ import {
   fetchRobotsError
 } from './actions';
 
-export function* fetchRobots() {
+function* fetchRobots() {
   try {
     const robots = yield call(robotsService.fetchAllRobots);
     yield put(fetchRobotSuccess(robots));
@@ -22,7 +22,7 @@ export function* fetchRobots() {
   }
 }
 
-export function* watchFetchRobots() {
+function* watchFetchRobots() {
   yield takeLatest(FETCH_ROBOTS, fetchRobots);
 }
 

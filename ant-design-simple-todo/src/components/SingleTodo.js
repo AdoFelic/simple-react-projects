@@ -1,38 +1,43 @@
-import React, { Component } from 'react';
+import React from 'react';
 import "antd/dist/antd.css";
 import "./SingleTodo.css";
 import { List, Icon, Row, Col } from "antd";
 
-class SingleTodo extends Component {
-  remove = () => {
-    // Remove this TodoItem
-    this.props.removeTodo(this.props.todo.id);
+function SingleTodo(props) {
+  const remove = () => {
+    props.removeTodo(props.todo.id);
   };
 
-  showDate(dates) {
-    if (dates[0] != dates[1]) {
+  const complete = () => {
+    props.completeTodo(props.todo.id);
+  }
+
+  const showDate = (dates) => {
+    if (dates[0] !== dates[1]) {
       return `${dates[0]} - ${dates[1]}`;
     }
     return dates[0];
   }
 
-  render() {
-    return (
-      <List.Item
-        actions={[
-          <Icon
-            type="close-circle" theme="filled"
-            onClick={this.remove}/>
-          ]}>
-        <Row>
-          <Col className="single-todo__text-column">{this.props.todo.text}</Col>
-          <Col>
-            {this.showDate(this.props.todo.dates)}
-          </Col>
-        </Row>
-      </List.Item>
-    );
-  }
+  return (
+    <List.Item
+      actions={[
+        <Icon
+          type={props.todo.completed ? "play-circle" : "check-circle"} theme="filled"
+          onClick={complete}
+        />,
+        <Icon
+          type="close-circle" theme="filled"
+          onClick={remove}/>
+        ]}>
+      <Row>
+        <Col className={`single-todo__text-column`} style={{textDecoration: props.todo.completed ? 'line-through' : ''}}>{props.todo.text}</Col>
+        <Col style={{textDecoration: props.todo.completed ? 'line-through' : ''}}>
+          {showDate(props.todo.dates)}
+        </Col>
+      </Row>
+    </List.Item>
+  );
 }
 
 export default SingleTodo;

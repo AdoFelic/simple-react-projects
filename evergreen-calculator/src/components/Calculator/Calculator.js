@@ -35,12 +35,12 @@ class Calculator extends Component {
     if (!isNaN(clickedKey) || clickedKey === ".") {
       if (op1 === "" || op === "") {
         if (!(clickedKey === "." && op1.toString().indexOf(".") > -1)) {
-          op1 = op1 == 0 ? "" + clickedKey : op1 + clickedKey;
+          op1 = op1 === 0 ? "" + clickedKey : op1 + clickedKey;
           acc = op1;
         }
       } else {
         if (!(clickedKey === "." && op2.toString().indexOf(".") > -1)) {
-          op2 = op2 == 0 ? "" + clickedKey : op2 + clickedKey;
+          op2 = op2 === 0 ? "" + clickedKey : op2 + clickedKey;
           acc = op1 + " " + op + " " + op2;
         }
       }
@@ -65,13 +65,13 @@ class Calculator extends Component {
         }
       } else if (clickedKey === "DEL") {
         if (op2 !== "") {
-          if (op2.toString().length == 1) {
+          if (op2.toString().length === 1) {
             op2 = 0;
           } else {
             op2 = Number(op2.toString().substring(0, op2.toString().length-1))
           }
         } else if (op1 !== "") {
-          if (op1.toString().length == 1) {
+          if (op1.toString().length === 1) {
             op1 = 0;
           } else {
             op1 = Number(op1.toString().substring(0, op1.toString().length-1))

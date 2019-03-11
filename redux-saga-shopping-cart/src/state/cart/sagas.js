@@ -2,7 +2,8 @@ import {
   call,
   put,
   takeLatest,
-  fork
+  fork,
+  all
 } from 'redux-saga/effects'
 
 import {
@@ -20,17 +21,17 @@ import {
 
 import * as cartService from '../../service/cartService';
 
-export function* fetchCart() {
+function* fetchCart() {
   try {
-    const cart = yield call(cartService.fetch);
+    const cart = yield call(cartService.fetchCart);
     yield put(fetchCartSuccess(cart));
   } catch (error) {
     yield put(fetchCartFailure(error));
   }
 }
 
-export function* addToCart(action) {  
-  try {    
+function* addToCart(action) {
+  try {
     const cart = yield call(cartService.addToCart, action.robot, action.quantity);
     yield put(addToCartSuccess(cart));
   } catch (error) {
@@ -38,7 +39,7 @@ export function* addToCart(action) {
   }
 }
 
-export function* removeFromCart(action) {
+function* removeFromCart(action) {
   try {
     const cart = yield call(cartService.removeFromCart, action.productId);
     yield put(removeFromCartSuccess(cart));
@@ -47,21 +48,23 @@ export function* removeFromCart(action) {
   }
 }
 
-export function* watchFetchCart() {
+function* watchFetchCart() {
   yield takeLatest(FETCH_CART, fetchCart)
 }
 
-export function* watchAddToCart() {
+function* watchAddToCart() {
   yield takeLatest(ADD_TO_CART, addToCart)
 }
 
-export function* wathRemoveFromCart() {
+function* wathRemoveFromCart() {
   yield takeLatest(REMOVE_FROM_CART, removeFromCart);
 }
 
 export default function* () {
-  yield fork(watchFetchCart);
-  yield fork(watchAddToCart);
-  yield fork(wathRemoveFromCart);
+  yield all([
+    fork(watchFetchCart),
+    fork(watchAddToCart),
+    fork(wathRemoveFromCart)
+  ])
 }
 

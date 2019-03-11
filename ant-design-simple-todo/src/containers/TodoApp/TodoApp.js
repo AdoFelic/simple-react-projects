@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import "./TodoApp.css";
 import "antd/dist/antd.css";
 
@@ -6,87 +6,86 @@ import { Row, Col, Input, List, DatePicker } from "antd";
 
 import SingleTodo from '../../components/SingleTodo';
 
+function TodoApp() {
+  const [todoList, setTodos] = useState([]);
+  const [todoDates, setDates] = useState([]);
+  const [toggleInput, setToggleInput] = useState(false);
 
-class TodoApp extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      todoList: [],
-      todoDates: [],
-      toggleInput: false
-    };
-  }
-
-  handleAddTodoOnEnter = e => {
+  const handleAddTodoOnEnter = (e) => {
     const newTodo = {
-      id: this.state.todoList.length,
+      id: todoList.length,
       text: e.target.value,
-      dates: this.state.todoDates
+      dates: todoDates,
+      completed: false
     };
-
-    this.setState({
-      todoList: this.state.todoList.concat(newTodo),
-      toggleInput: false,
-      todoDates: []
-    });
-
+    setTodos(todoList.concat(newTodo));
+    setDates([]);
+    setToggleInput(false);
     e.target.value = "";
   }
 
-  removeFromList = (index) => {
-    let updatedList = this.state.todoList;
-    updatedList.splice(index, 1);
+  const removeFromList = (index) => {
+    let updatedList = todoList.filter(item => {
+      return item.id !== index;
+    });
     for (let i = index; i < updatedList.length; i++) {
       updatedList[i].id -= 1;
-    }
-    this.setState({
-      todoList: updatedList
-    });
+    } 
+    setTodos(updatedList);
+    setDates([]);
   }
 
-  handleDateChange = (date) => {
+  const onCompleteTodo = (index) => {
+    let result = todoList.map(item => {
+      if (item.id === index) {
+        return {
+          ...item,
+          completed: !item.completed
+        }
+      }
+      return item;
+    });
+    setTodos(result);
+  }
+
+  const handleDateChange = (date) => {
     const dates = date.map(d => {
       return d.format('DD MMM YYYY').toString();
     });
-    
-    this.setState({
-      toggleInput: true,
-      todoDates: dates
-    })
+    setToggleInput(true);
+    setDates(dates);
   }
 
-  render() {
-    return (
-      <div className="todoApp__container">
-        <Row gutter={24}>
-          <Col span={12}>
-            <h1>TODOs</h1>
-            {!this.state.toggleInput &&
-            <DatePicker.RangePicker format="YYYY-MM" showPanels={['day', 'day']} 
-              onChange={this.handleDateChange}/>}
-            {this.state.toggleInput && 
-              <Input
+  return (
+    <div className="todoApp__container">
+      <Row gutter={24}>
+        <Col span={12}>
+          <h1>TODOs</h1>
+          {!toggleInput &&
+          <DatePicker.RangePicker format="YYYY-MM" showPanels={['day', 'day']} 
+            onChange={handleDateChange}/>}
+          {toggleInput && 
+            <Input
               placeholder="Add a TODO..."
-              onPressEnter={this.handleAddTodoOnEnter}/>
-            }
-          </Col>
-          <Col span={12}>
-          <List
-              dataSource={this.state.todoList}
-              locale={{ emptyText: "Empty list" }}
-              renderItem={item => (
-                <SingleTodo
-                    todo={item}
-                    removeTodo={this.removeFromList}
-                  />
-              )}
-            />
-          </Col>
-        </Row>
-      </div>
-    )
-  }
+              onPressEnter={handleAddTodoOnEnter}/>
+          }
+        </Col>
+        <Col span={12}>
+        <List
+            dataSource={todoList}
+            locale={{ emptyText: "Empty list" }}
+            renderItem={item => (
+              <SingleTodo
+                  todo={item}
+                  removeTodo={removeFromList}
+                  completeTodo={onCompleteTodo}
+                />
+            )}
+          />
+        </Col>
+      </Row>
+    </div>
+  );
 }
 
 export default TodoApp;

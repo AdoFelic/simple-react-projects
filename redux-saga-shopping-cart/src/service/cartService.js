@@ -8,12 +8,10 @@ const getFromLocalStorage = () => {
   return cart || emptyCart
 }
 
-export const fetch = async () => getFromLocalStorage();
-
 export const fetchCart = async () => getFromLocalStorage();
 
-export const addToCart = async (robot, quantity) => {  
-  const cart = await fetch();
+export const addToCart = async (robot, quantity) => {
+  const cart = await fetchCart();
   const exists = cart.payload.findIndex(item => item.robot.id === robot.id) > -1;
   
   if (exists) {
@@ -46,7 +44,7 @@ export const addToCart = async (robot, quantity) => {
 }
 
 export const removeFromCart = async (robotId) => {
-  const currentCart = await fetch()
+  const currentCart = await fetchCart()
   const exists = currentCart.payload.findIndex(item => item.robot.id === robotId) > -1;
 
   if (!exists) {

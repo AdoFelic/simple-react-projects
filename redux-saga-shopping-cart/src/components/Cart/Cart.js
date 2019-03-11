@@ -34,28 +34,32 @@ class Cart extends Component {
         <FiShoppingCart className="cart__icon" onClick={this.toggleCart} />
           <Card className={"cart__container-content " + (this.state.showToggle ? "opened" : "closed")}>
             {robots.length === 0 && <Card.Header>The cart is empty!</Card.Header>}
-            <Card.Body>
-              {
-                robots.map(item => (
-                  <Row key={item.robot.id} className="card__container-item">
-                    <Col xs={4}>
-                      <img alt={item.robot.name} src={item.robot.avatar}/>
-                    </Col>
-                    <Col className="card__container-item-details" xs={6}>
-                      <div>{item.robot.name}</div>
-                      <div>{item.robot.price}$</div>
-                      <div>x{item.quantity}</div>
-                    </Col>
-                    <Col xs={2}>
-                        <FiXCircle className="remove__icon" onClick={() => this.onRemove(item.robot.id)}/>
-                    </Col>
-                  </Row>
-                ))
-              }
-            </Card.Body>
-            {robots.length > 0 && <Card.Footer>Total: {robots.reduce((acc, curr) => {
-              return acc + (Number(curr.robot.price) * Number(curr.quantity));
-            }, 0).toFixed(2)}$</Card.Footer>}
+            {robots.length > 0 &&
+              <>
+                <Card.Body>
+                  {
+                    robots.map(item => (
+                      <Row key={item.robot.id} className="card__container-item">
+                        <Col xs={4}>
+                          <img alt={item.robot.name} src={item.robot.avatar}/>
+                        </Col>
+                        <Col className="card__container-item-details" xs={6}>
+                          <div>{item.robot.name}</div>
+                          <div>{item.robot.price}$</div>
+                          <div>x{item.quantity}</div>
+                        </Col>
+                        <Col xs={2}>
+                            <FiXCircle className="remove__icon" onClick={() => this.onRemove(item.robot.id)}/>
+                        </Col>
+                      </Row>
+                    ))
+                  }
+                </Card.Body>
+                <Card.Footer>Total: {robots.reduce((acc, curr) => {
+                  return acc + (Number(curr.robot.price) * Number(curr.quantity));
+                }, 0).toFixed(2)}$</Card.Footer>
+              </>
+            }
           </Card>
       </div>
     );
