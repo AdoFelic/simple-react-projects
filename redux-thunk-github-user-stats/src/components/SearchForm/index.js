@@ -5,12 +5,23 @@ import Form from 'react-bootstrap/Form';
 
 class SearchForm extends Component {
   render() {
+    const {
+      handleSubmit,
+      username,
+      onUsernameChange,
+    } = this.props;
     return (
       <div>
-        <Form onSubmit={this.props.handleSubmit}>
+        <Form onSubmit={handleSubmit}>
           <Form.Group>
             <Form.Label>Username</Form.Label>
-            <Form.Control type="text" placeholder="Who are you looking for?" name="username" value={this.props.username} onChange={this.props.onUsernameChange} />
+            <Form.Control 
+              type="text" 
+              placeholder="Who are you looking for?" 
+              name="username" 
+              value={username} 
+              onChange={onUsernameChange} 
+            />
             <Form.Text className="text-muted">
               Enter the username of a github user to see some stats.
             </Form.Text>
