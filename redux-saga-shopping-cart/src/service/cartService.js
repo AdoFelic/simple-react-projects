@@ -1,70 +1,61 @@
-const saveToLocalStorage = (cart) => {
-  localStorage.setItem('cart', JSON.stringify(cart));
-}
+const saveToLocalStorage = cart => {
+  localStorage.setItem("cart", JSON.stringify(cart));
+};
 
 const getFromLocalStorage = () => {
   const emptyCart = { payload: [] };
-  const cart = JSON.parse(localStorage.getItem('cart'));
-  return cart || emptyCart
-}
+  const cart = JSON.parse(localStorage.getItem("cart"));
+  return cart || emptyCart;
+};
 
 export const fetchCart = async () => getFromLocalStorage();
 
 export const addToCart = async (robot, quantity) => {
   const cart = await fetchCart();
-  const exists = cart.payload.findIndex(item => item.robot.id === robot.id) > -1;
-  
+  const exists = cart.payload.some(item => item.robot.id === robot.id);
+
   if (exists) {
-    cart.payload.map(item => {
-      if (item.robot["id"] === robot.id) {
-        item["quantity"] += quantity;
+    cart.payload.forEach(item => {
+      if (item.robot.id === robot.id) {
+        item.quantity += quantity;
       }
       return item;
     });
-    const newCart = {
-      ...cart,
-      payload: [
-        ...cart.payload
-      ]
-    }
-    saveToLocalStorage(newCart);
-    return newCart;
+    saveToLocalStorage(cart);
+    return cart;
   } else {
-    let newItem = { robot, quantity };
-    const newCart = {
-      ...cart,
-      payload: [
-        ...cart.payload,
-        newItem
-      ]
-    }
-    saveToLocalStorage(newCart);
-    return newCart;
+    cart.payload.push({ robot, quantity });
+    saveToLocalStorage(cart);
+    return cart;
   }
-}
+};
 
-export const removeFromCart = async (robotId) => {
-  const currentCart = await fetchCart()
-  const exists = currentCart.payload.findIndex(item => item.robot.id === robotId) > -1;
+export const removeFromCart = async robotId => {
+  const currentCart = await fetchCart();
+  const exists = currentCart.payload.some(item => item.robot.id === robotId);
 
   if (!exists) {
-    throw Error( 'Item does not exist in the cart!' );
+    throw Error("Item does not exist in the cart!");
   }
 
-  let itemToRemoveOrReduce = currentCart.payload.find(item => item.robot.id === robotId);
+  let itemToRemoveOrReduce = currentCart.payload.find(
+    item => item.robot.id === robotId
+  );
 
-  let newCart = {payload: []};
-  if (itemToRemoveOrReduce['quantity'] > 1) {
+  let newCart = { payload: [] };
+  if (itemToRemoveOrReduce.quantity > 1) {
     currentCart.payload.forEach(item => {
       if (item.robot.id === robotId) {
-        item['quantity'] -= 1;
+        item.quantity -= 1;
       }
       newCart.payload.push(item);
-    })
+    });
   } else {
-    let filteredpayload = currentCart.payload.filter(item => item.robot.id !== robotId);
+    let filteredpayload = currentCart.payload.filter(
+      item => item.robot.id !== robotId
+    );
     newCart.payload = filteredpayload;
   }
   saveToLocalStorage(newCart);
   return newCart;
-}
+};

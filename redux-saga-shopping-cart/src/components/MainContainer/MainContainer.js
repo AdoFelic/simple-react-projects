@@ -1,81 +1,69 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { fetchRobots } from '../../state/robots/actions';
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { FiChevronsUp } from "react-icons/fi";
+import Container from "react-bootstrap/Container";
+import Button from "react-bootstrap/Button";
 
-import { FiChevronsUp } from 'react-icons/fi';
+import { fetchRobots } from "../../state/robots/actions";
+import Robots from "../Robots/Robots";
+import "./MainContainer.scss";
 
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
+const MainContainer = ({ fetchRobots, loading, robots }) => {
+  const [showScrollButton, setShowScrollButton] = useState(false);
 
-import './MainContainer.scss';
-import Robots from '../Robots/Robots';
+  useEffect(() => {
+    fetchRobots();
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
-class MainContainer extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      showScrollButton : false,
+  const scrollToTop = () => {
+    for (let i = 0; i < window.scrollY; i++) {
+      (function() {
+        setTimeout(function scrolling() {
+          window.scroll(0, window.scrollY - 1);
+        }, 5000 / window.scrollY);
+      })();
     }
   };
 
-  componentWillMount() {
-    this.props.fetchRobots();
-  }
-
-  componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll);
-  }
-  
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
-  }
-  
-  scrollToTop = () => {
-    for (let i=0;i<window.scrollY;i++){
-      (function(){
-        setTimeout(function scrolling(){
-          window.scroll(0, window.scrollY-1);
-        }, (5000/window.scrollY))
-      })();
-    }
-  }
-
-  handleScroll = () => {
+  const handleScroll = () => {
     if (window.scrollY > 56) {
-      this.setState({showScrollButton: true})
+      setShowScrollButton(true);
     } else {
-      this.setState({showScrollButton: false})
+      setShowScrollButton(false);
     }
-  }
-  
-  render() {
-    const {
-      loading,
-      robots
-    } = this.props;
+  };
 
-    return (
-      <div>
-        <Container className="main-container" ref={this.mainContainerRef}>
-          {loading && <div className="lds-hourglass"></div>}
-          <Robots robots={robots} onScroll={this.onScrollContainer}/>
-          {this.state.showScrollButton && <Button className="to-top__button" onClick={this.scrollToTop}> <FiChevronsUp /> </Button>}
-        </Container>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <Container className="main-container">
+        {loading && <div className="lds-hourglass" />}
+        <Robots robots={robots} />
+        {showScrollButton && (
+          <Button className="to-top__button" onClick={scrollToTop}>
+            <FiChevronsUp />
+          </Button>
+        )}
+      </Container>
+    </div>
+  );
+};
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     loading: state.robots.loading,
     robots: state.robots.payload
-  }
-}
+  };
+};
 
 const mapDispatchToProps = {
   fetchRobots
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MainContainer);
