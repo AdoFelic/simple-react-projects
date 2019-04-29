@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Pane, Text } from 'evergreen-ui';
 import './Calculator.css';
 import Clock from '../Clock/Clock';
@@ -6,31 +6,37 @@ import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
 import ResultsScreen from '../ResultsScreen/ResultsScreen';
 import Keypad from '../Keypad/Keypad';
 
-class Calculator extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      theme: "Light",
-      op1: "",
-      op2: "",
-      operation: "",
-      accumulator: 0
+const Calculator = () => {
+  const [theme, setTheme] = useState("Light");
+  const [operand1, setOperand1] = useState("");
+  const [operand2, setOperand2] = useState("");
+  const [operation, setOperation] = useState("");
+  const [accumulator, setAccumulator] = useState(0);
+
+  const handleThemeChange = theme => setTheme(theme);
+
+  const applyOperation = (op1, op2, operation) => {
+    switch(operation) {
+      case "+":
+        return Number(op1) + Number(op2);
+      case "-":
+        return Number(op1) - Number(op2);
+      case "*":
+        return Number(op1) * Number(op2);
+      case "/":
+        return Number(op1) / Number(op2);
+      default:
+        return 0;
     }
   }
 
-  handleThemeChange = theme => {
-    this.setState({
-      theme
-    })
-  }
-
-  onKeypadClick = evt => {
+  const onKeypadClick = evt => {
     let clickedKey = evt.target.value;
 
-    let acc = this.state.accumulator;
-    let op1 = this.state.op1;
-    let op2 = this.state.op2;
-    let op = this.state.operation;
+    let acc = accumulator;
+    let op1 = operand1;
+    let op2 = operand2;
+    let op = operation;
 
     if (!isNaN(clickedKey) || clickedKey === ".") {
       if (op1 === "" || op === "") {
@@ -54,7 +60,7 @@ class Calculator extends Component {
       } else if (op === "" && (clickedKey === "+" || clickedKey === "-" || clickedKey === "*" || clickedKey === "/")) {
         op = clickedKey;
       } else if (clickedKey === "=") {
-        op1 = this.applyOperation(op1, op2, op);
+        op1 = applyOperation(op1, op2, op);
         op2 = "";
         op = "";
       } else if (clickedKey === "±") {
@@ -78,7 +84,7 @@ class Calculator extends Component {
           }
         }
       } else {
-        op1 = this.applyOperation(op1, op2, op);
+        op1 = applyOperation(op1, op2, op);
         op2 = "";
         op = clickedKey;
       }
@@ -99,58 +105,41 @@ class Calculator extends Component {
       op = "";
     }
 
-    this.setState({
-      accumulator: acc,
-      op1: op1,
-      op2: op2,
-      operation: op
-    })
+    setAccumulator(acc);
+    setOperand1(op1);
+    setOperand2(op2);
+    setOperation(op);
   }
 
-  applyOperation = (op1, op2, operation) => {
-    switch(operation) {
-      case "+":
-        return Number(op1) + Number(op2);
-      case "-":
-        return Number(op1) - Number(op2);
-      case "*":
-        return Number(op1) * Number(op2);
-      case "/":
-        return Number(op1) / Number(op2);
-      default:
-        return 0;
-    }
-  }
-
-  render() {
-    return (
-      <div className="calculator-container">
+  return (
+    <div className="calculator-container">
       <Pane 
-      margin={16}
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      flexDirection="column">
+        margin={16}
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        flexDirection="column"
+      >
         <Text>Theme Picker</Text>
-        <ThemeSwitcher selectedTheme={this.state.theme} onChangeTheme={this.handleThemeChange}/>
+        <ThemeSwitcher selectedTheme={theme} onChangeTheme={handleThemeChange}/>
           <Pane
             clearfix
             elevation={4}
-            backgroundColor={this.state.theme === "Light" ? "#DDEBF7" : "#425A70"}
+            backgroundColor={theme === "Light" ? "#DDEBF7" : "#425A70"}
             width={400}
             margin={32}
             padding={8}
             display="flex"
             flexDirection="column"
-            className="calculator-content__container">
-              <Clock theme={this.state.theme}/>
-              <ResultsScreen result={this.state.accumulator}/>
-              <Keypad onKeyClick={this.onKeypadClick} selectedTheme={this.state.theme}/>
-            </Pane>
-        </Pane> 
-      </div>
-    );
-  }
+            className="calculator-content__container"
+          >
+            <Clock theme={theme}/>
+            <ResultsScreen result={accumulator}/>
+            <Keypad onKeyClick={onKeypadClick} selectedTheme={theme}/>
+          </Pane>
+      </Pane> 
+    </div>
+  );
 }
 
 export default Calculator;

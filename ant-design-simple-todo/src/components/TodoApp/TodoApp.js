@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import "./TodoApp.css";
-import "antd/dist/antd.css";
-
 import { Row, Col, Input, List, DatePicker } from "antd";
 
-import SingleTodo from '../../components/SingleTodo';
+import "antd/dist/antd.css";
+import "./TodoApp.css";
 
-function TodoApp() {
+import SingleTodo from '../SingleTodo/SingleTodo';
+
+const TodoApp = () => {
   const [todoList, setTodos] = useState([]);
   const [todoDates, setDates] = useState([]);
   const [toggleInput, setToggleInput] = useState(false);
@@ -58,22 +58,24 @@ function TodoApp() {
 
   return (
     <div className="todoApp__container">
-      <Row gutter={24}>
-        <Col span={12}>
+      <Row gutter={16}>
+        <Col xs={{ span: 24 }} md={{ span: 12 }} className="flex-center__container">
           <h1>TODOs</h1>
           {!toggleInput &&
           <DatePicker.RangePicker format="YYYY-MM" showPanels={['day', 'day']} 
             onChange={handleDateChange}/>}
-          {toggleInput && 
-            <Input
-              placeholder="Add a TODO..."
-              onPressEnter={handleAddTodoOnEnter}/>
+          {
+            toggleInput && 
+              <Input
+                placeholder="Add a TODO..."
+                onPressEnter={handleAddTodoOnEnter}/>
           }
         </Col>
-        <Col span={12}>
-        <List
+        <Col xs={{ span: 24 }} md={{ span: 12 }} className="flex-center__container">
+          <List
             dataSource={todoList}
             locale={{ emptyText: "Empty list" }}
+            style={{ marginTop: 32 }}
             renderItem={item => (
               <SingleTodo
                   todo={item}
