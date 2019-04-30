@@ -1,15 +1,12 @@
-import React, { Component } from 'react';
-
+import React from "react";
 import "./Loader.scss";
 
-class Loader extends Component {
-  render() {
-    return (
-      <div className="lds-circle">
-        <div></div>
-      </div>
-    );
-  }
-}
-
+const Loader = () => {
+  return (
+    <div className="lds-circle">
+      <div />
+    </div>
+  );
+};
+  
 export default Loader;

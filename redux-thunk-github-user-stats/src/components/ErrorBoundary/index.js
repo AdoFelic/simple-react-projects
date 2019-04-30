@@ -8,6 +8,7 @@ class ErrorBoundary extends Component {
     }
   }
 
+  // https://reactjs.org/docs/hooks-faq.html#do-hooks-cover-all-use-cases-for-classes
   componentDidCatch(error, info) {
     this.setState({ hasError: true })
   }

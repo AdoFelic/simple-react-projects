@@ -19,7 +19,7 @@ const fetchUserError = (error) => ({
 })
 
 export const fetchUserData = (userName) => (dispatch) => {
-  dispatch(fetchUser);
+  dispatch(fetchUser());
   fetch(`https://api.github.com/users/${userName}`)
       .then(response => response.json())
       .then(data => dispatch(fetchUserSuccess(data)))
