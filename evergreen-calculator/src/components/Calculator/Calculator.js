@@ -126,7 +126,6 @@ const Calculator = () => {
             clearfix
             elevation={4}
             backgroundColor={theme === "Light" ? "#DDEBF7" : "#425A70"}
-            width={400}
             margin={32}
             padding={8}
             display="flex"

@@ -21,7 +21,7 @@ const UserCard = ({
           <div className="flip-card-front">
             <img src={avatar_url} alt="Avatar" />
             <h4>
-              {login} ({name})
+              {login} {name ? `(${name})` : ''}
             </h4>
           </div>
           <div className="flip-card-back">

@@ -9,5 +9,7 @@
 }
 
 .calculator-content__container {
-  min-height: 550px;
+  min-height: 455px;
+  min-width: 300px;
+  max-width: 480px;
 }

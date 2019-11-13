@@ -1,6 +1,7 @@
+// Breakpoints
+$bp-sm: 576px;
+
 .cart__container {
-  position: absolute;
-  right: 1rem;
   svg {
     font-size: 1.8rem;
     cursor: pointer;
@@ -15,8 +16,8 @@
 
 .cart__container-content {
   position: absolute;
-  right: 40px;
-  top: 6px;
+  right: 50px;
+  top: 10px;
   width: 300px;
   z-index: 1;
   border: 2px solid rgba(50, 48, 48, 0.808);
@@ -65,6 +66,9 @@
 
   .card__container-item {
     padding: 8px 0px;
+    svg {
+      transform: scale(2);
+    }
     img {
       width: 55px;
     }
@@ -73,6 +77,29 @@
     }
     .card__container-item-details {
       font-size: 14px;
+    }
+    .remove-icon__wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  @media only screen and(max-width: $bp-sm) {
+    right: 0;
+    left: 0;
+    margin: auto;
+    top: 48px;
+    width: 95%;
+
+    &:after, &:before{
+      display: none;
+    }
+
+    .card__container-item {
+      svg {
+        transform: scale(1);
+      }
     }
   }
 }
@@ -83,8 +110,8 @@
    color: black;
    width: 25px;
    height: 25px;
-   top: 10px;
-   left: -10px;
+   bottom: 5px;
+   right: 30px;
    font-size: 12px;
    display: flex;
    justify-content: center;
@@ -92,4 +119,5 @@
    border-radius: 50%;
    font-weight: bold;
    border: 1px solid orange;
+   cursor: pointer;
 }

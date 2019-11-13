@@ -25,7 +25,7 @@ const Cart = ({ fetchCart, removeFromCart, robots }) => {
       <div>
         <FiShoppingCart className="cart__icon" onClick={toggleCart} />
         {robots.length > 0 && (
-          <div className="cart__items-quantity">
+          <div className="cart__items-quantity" onClick={toggleCart}>
             {robots.reduce((acc, curr) => (acc += curr.quantity), 0)}
           </div>
         )}
@@ -37,6 +37,9 @@ const Cart = ({ fetchCart, removeFromCart, robots }) => {
       >
         {robots.length > 0 ? (
           <>
+            <Card.Header>
+              Cart
+            </Card.Header>
             <Card.Body>
               {robots.map(item => (
                 <Row key={item.robot.id} className="card__container-item">
@@ -48,7 +51,7 @@ const Cart = ({ fetchCart, removeFromCart, robots }) => {
                     <div>{item.robot.price}$</div>
                     <div>x{item.quantity}</div>
                   </Col>
-                  <Col xs={2}>
+                  <Col xs={2} className="remove-icon__wrapper">
                     <FiXCircle
                       className="remove__icon"
                       onClick={() => onRemove(item.robot.id)}
